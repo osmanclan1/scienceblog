@@ -18,9 +18,12 @@ interface Article {
 }
 
 export default function AdminPage() {
+  const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [topics, setTopics] = useState<Topic[]>([])
   const [activeTab, setActiveTab] = useState<'articles' | 'topics'>('articles')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   
   // Article state
   const [isCreatingArticle, setIsCreatingArticle] = useState(false)
@@ -47,17 +50,6 @@ export default function AdminPage() {
   
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadArticles()
-      loadTopics()
-    }
-  }, [isAuthenticated])
 
   const checkAuth = async () => {
     try {
@@ -328,6 +320,19 @@ export default function AdminPage() {
     setIsCreatingTopic(false)
     setEditingTopicId(null)
   }
+
+  useEffect(() => {
+    checkAuth()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadArticles()
+      loadTopics()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated])
 
   if (checkingAuth) {
     return (
