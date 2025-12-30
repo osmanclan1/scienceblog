@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { motion } from 'framer-motion'
-import { Plus, Trash2, Eye, Edit2, X } from 'lucide-react'
+import { Plus, Trash2, Eye, Edit2, X, LogOut } from 'lucide-react'
 import { Topic } from '@/lib/topics-client'
+import { useRouter } from 'next/navigation'
 
 interface Article {
   slug: string
@@ -48,9 +49,45 @@ export default function AdminPage() {
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
-    loadArticles()
-    loadTopics()
+    checkAuth()
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadArticles()
+      loadTopics()
+    }
+  }, [isAuthenticated])
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('/api/auth/check')
+      if (response.ok) {
+        const data = await response.json()
+        if (data.authenticated) {
+          setIsAuthenticated(true)
+        } else {
+          router.push('/login?redirect=/admin')
+        }
+      } else {
+        router.push('/login?redirect=/admin')
+      }
+    } catch (err) {
+      router.push('/login?redirect=/admin')
+    } finally {
+      setCheckingAuth(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      router.push('/login')
+      router.refresh()
+    } catch (err) {
+      console.error('Failed to logout:', err)
+    }
+  }
 
   const loadArticles = async () => {
     try {
@@ -292,6 +329,21 @@ export default function AdminPage() {
     setEditingTopicId(null)
   }
 
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-text-secondary-light dark:text-text-secondary-dark">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
@@ -300,10 +352,21 @@ export default function AdminPage() {
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark mb-2">
-          Admin Panel
-        </h1>
-        <p className="text-text-secondary-light dark:text-text-secondary-dark">Manage your articles and topics</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark mb-2">
+              Admin Panel
+            </h1>
+            <p className="text-text-secondary-light dark:text-text-secondary-dark">Manage your articles and topics</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-error/10 hover:bg-error/20 text-error rounded-xl font-medium transition-all"
+          >
+            <LogOut className="w-5 h-5" />
+            Logout
+          </button>
+        </div>
       </motion.div>
 
       {/* Tabs */}

@@ -21,12 +21,6 @@ export default function Navbar() {
             >
               Articles
             </Link>
-            <Link
-              href="/admin"
-              className="text-text-primary-light dark:text-text-primary-dark hover:text-primary font-medium transition-colors hidden sm:block"
-            >
-              Admin
-            </Link>
             <ThemeToggle />
           </div>
         </div>

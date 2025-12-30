@@ -20,12 +20,23 @@ A modern, private blog website built with Next.js, TypeScript, and Tailwind CSS.
 npm install
 ```
 
-2. Run the development server:
+2. (Optional) Set admin password:
+   - Create a `.env.local` file in the root directory
+   - Add: `ADMIN_PASSWORD=your-secure-password`
+   - Default password is `admin123` (change this in production!)
+
+3. Run the development server:
 ```bash
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Admin Access
+
+- Default password: `admin123`
+- Login at `/login` or access `/admin` (will redirect to login if not authenticated)
+- Set `ADMIN_PASSWORD` environment variable to change the password
 
 ## Usage
 
