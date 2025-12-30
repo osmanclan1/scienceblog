@@ -4,9 +4,6 @@ description: "Understanding the force experienced by charged particles in electr
 quiz: {"questions":[{"question":"What is the Lorentz force?","type":"multiple-choice","options":["The force experienced by a charged particle in only an electric field","The force experienced by a charged particle in only a magnetic field","The force experienced by a charged particle in both electric and magnetic fields","The force between two stationary charges"],"correctAnswer":"The force experienced by a charged particle in both electric and magnetic fields","explanation":"The Lorentz force combines both electric and magnetic field effects on moving charged particles."},{"question":"Why is B multiplied with v in the Lorentz force equation F = q(E + v × B)?","type":"multiple-choice","options":["Because both B and v are constants in the equation","Because the magnetic force depends on velocity - moving charges interact with magnetic fields, and if a charge is stationary (v = 0), there is no magnetic force","Because it makes the equation more complex","Because B and v must always be equal"],"correctAnswer":"Because the magnetic force depends on velocity - moving charges interact with magnetic fields, and if a charge is stationary (v = 0), there is no magnetic force","explanation":"The velocity term is crucial because magnetic fields only affect moving charges, and the interaction strength depends on how fast the charge is moving. The cross product v × B ensures the magnetic force is perpendicular to both the velocity and magnetic field directions."}]}
 ---
 
-
-# Lorentz Force
-
 The Lorentz force is the force experienced by a charged particle moving through both an electric field and a magnetic field.
 
 ## Historical Context

@@ -26,8 +26,6 @@ quiz:
       explanation: "Superconductivity eliminates electrical resistance, allowing for much stronger magnetic fields and more efficient operation, making them ideal for high-speed maglev trains."
 ---
 
-# Magnetic Levitation
-
 Let's start with a definition. **Magnetic levitation** is a transportation system that uses powerful magnets to lift trains, propel them forward or backward, and guide them to keep them on track.
 
 ## How Does Maglev Work?

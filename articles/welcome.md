@@ -5,8 +5,6 @@ topic: General
 excerpt: A brief introduction to this private blog about science and concepts.
 ---
 
-# Welcome to My Blog
-
 Welcome to my private blog! This is a space where I explore and explain various topics in science and other fascinating concepts.
 
 ## What You'll Find Here
