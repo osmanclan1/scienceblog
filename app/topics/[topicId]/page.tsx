@@ -2,7 +2,9 @@ import { getTopicById, getAllTopics } from '@/lib/topics'
 import { notFound } from 'next/navigation'
 import TopicPageClient from '@/components/TopicPageClient'
 import { remark } from 'remark'
-import html from 'remark-html'
+import remarkRehype from 'remark-rehype'
+import rehypeRaw from 'rehype-raw'
+import rehypeStringify from 'rehype-stringify'
 
 export async function generateStaticParams() {
   const topics = getAllTopics()
@@ -23,7 +25,9 @@ export default async function TopicPage({
   }
 
   const processedContent = await remark()
-    .use(html)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(topic.content)
 
   const contentHtml = processedContent.toString()
