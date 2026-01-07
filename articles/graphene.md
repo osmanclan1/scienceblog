@@ -1,8 +1,8 @@
 ---
-title: The Material That Shouldn't Exist: Why Graphene is Changing Everything
+title: "The Material That Shouldn't Exist: Why Graphene is Changing Everything"
 date: 2026-01-20T00:00:00.000Z
 topic: Technology
-excerpt: Exploring graphene, the impossibly thin material that's 200 times stronger than steel and revolutionizing everything from batteries to construction in 2026.
+excerpt: "Exploring graphene, the impossibly thin material that's 200 times stronger than steel and revolutionizing everything from batteries to construction in 2026."
 requiredTopics: ["computer-chips"]
 ---
 
