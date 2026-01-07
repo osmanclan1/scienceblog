@@ -2,6 +2,44 @@
 id: computer-chips
 name: Computer Chips
 description: Understanding the fundamental principles of computer chips, from electricity and bits to transistors, logic gates, and the difference between CPUs and GPUs
+quiz:
+  questions:
+    - question: "In computer chips, what does a current flowing represent?"
+      type: "multiple-choice"
+      options:
+        - "0"
+        - "1"
+        - "Both 0 and 1"
+        - "Nothing"
+      correctAnswer: "1"
+      explanation: "In computer chips, a current flowing represents 1 (binary on), while no current flowing represents 0 (binary off). This is the fundamental basis of bits."
+    - question: "What is a semiconductor?"
+      type: "multiple-choice"
+      options:
+        - "A material that only allows electricity to flow"
+        - "A material that only blocks electricity"
+        - "A material that combines both the ability to allow and block electricity"
+        - "A type of logic gate"
+      correctAnswer: "A material that combines both the ability to allow and block electricity"
+      explanation: "Semiconductors like silicon combine both abilities - they can allow electricity to flow or block it. This is crucial for the core idea of bits (0s and 1s)."
+    - question: "What is the primary function of a transistor?"
+      type: "multiple-choice"
+      options:
+        - "To store data permanently"
+        - "To act as a microscopic electronic switch that can allow or block current flow"
+        - "To generate electricity"
+        - "To connect multiple chips together"
+      correctAnswer: "To act as a microscopic electronic switch that can allow or block current flow"
+      explanation: "Transistors function as microscopic electronic switches. By applying a voltage to one side, you can either allow a current to flow or block it, which is fundamental to how chips work."
+    - question: "What is the main difference between a CPU and a GPU?"
+      type: "multiple-choice"
+      options:
+        - "CPUs are faster than GPUs"
+        - "CPUs have many cores for parallel processing, while GPUs have few powerful cores"
+        - "CPUs have few but powerful cores for complex logic, while GPUs have many cores for parallel repetitive tasks"
+        - "There is no difference"
+      correctAnswer: "CPUs have few but powerful cores for complex logic, while GPUs have many cores for parallel repetitive tasks"
+      explanation: "CPUs contain few but powerful cores that work sequentially to handle complex operations like databases. GPUs feature many cores designed to perform many repetitive tasks simultaneously, like doing math or rendering pixels."
 ---
 
 # Computer Chips

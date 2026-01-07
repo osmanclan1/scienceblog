@@ -29,6 +29,8 @@ export function unlockTopic(topicId: string): void {
   if (!unlocked.includes(topicId)) {
     unlocked.push(topicId)
     localStorage.setItem('unlocked-topics', JSON.stringify(unlocked))
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('topic-unlocked', { detail: { topicId } }))
   }
 }
 

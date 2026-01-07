@@ -18,11 +18,26 @@ export default function ArticlePageClient({ article, requiredTopics }: ArticlePa
 
   useEffect(() => {
     setMounted(true)
-    if (requiredTopics.length === 0) {
-      setUnlocked(true)
-    } else {
-      const allUnlocked = requiredTopics.every(topicId => isTopicUnlocked(topicId))
-      setUnlocked(allUnlocked)
+    
+    const checkUnlocked = () => {
+      if (requiredTopics.length === 0) {
+        setUnlocked(true)
+      } else {
+        const allUnlocked = requiredTopics.every(topicId => isTopicUnlocked(topicId))
+        setUnlocked(allUnlocked)
+      }
+    }
+
+    checkUnlocked()
+
+    // Listen for topic unlock events
+    const handleTopicUnlocked = () => {
+      checkUnlocked()
+    }
+
+    window.addEventListener('topic-unlocked', handleTopicUnlocked)
+    return () => {
+      window.removeEventListener('topic-unlocked', handleTopicUnlocked)
     }
   }, [requiredTopics])
 
