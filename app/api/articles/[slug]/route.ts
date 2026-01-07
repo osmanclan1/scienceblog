@@ -32,7 +32,7 @@ export async function PUT(
   try {
     const { slug } = params
     const body = await request.json()
-    const { title, topic, content, excerpt, requiredTopics } = body
+    const { title, topic, content, excerpt, requiredTopics, quiz } = body
 
     if (!title || !topic || !content) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function PUT(
       )
     }
 
-    // Get existing article to preserve date
+    // Get existing article to preserve date and quiz
     const existing = await getArticleBySlug(slug)
     if (!existing) {
       return NextResponse.json(
@@ -50,13 +50,15 @@ export async function PUT(
       )
     }
 
-    // Update article (preserve original date)
-    saveArticle(slug, title, topic, content, excerpt, existing.date, requiredTopics)
+    // Update article (preserve original date, use provided quiz or keep existing)
+    const articleQuiz = quiz !== undefined ? quiz : (existing as any).quiz
+    saveArticle(slug, title, topic, content, excerpt, existing.date, requiredTopics, articleQuiz)
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Error updating article:', error)
     return NextResponse.json(
-      { error: 'Failed to update article' },
+      { error: error instanceof Error ? error.message : 'Failed to update article' },
       { status: 500 }
     )
   }

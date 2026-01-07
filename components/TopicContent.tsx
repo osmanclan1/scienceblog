@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Topic } from '@/lib/topics'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { useMemo } from 'react'
+import GraphRenderer from './graphs/GraphRenderer'
 
 interface TopicContentProps {
   topic: Topic
@@ -11,6 +13,61 @@ interface TopicContentProps {
 }
 
 export default function TopicContent({ topic, contentHtml }: TopicContentProps) {
+  // Replace graph placeholders with React components
+  const processedHtml = useMemo(() => {
+    let html = contentHtml
+    
+    // Replace [[Graph:graphId]] with a placeholder that we'll replace with React components
+    html = html.replace(/\[\[Graph:([^\]]+)\]\]/g, (match, graphId) => {
+      return `<div data-graph-id="${graphId.trim()}" class="graph-placeholder"></div>`
+    })
+    
+    return html
+  }, [contentHtml])
+
+  // Extract graph IDs and render them
+  const graphMatches = useMemo(() => {
+    const matches: Array<{ id: string; index: number }> = []
+    const regex = /data-graph-id="([^"]+)"/g
+    let match
+    let index = 0
+    
+    while ((match = regex.exec(processedHtml)) !== null) {
+      matches.push({ id: match[1], index: index++ })
+    }
+    
+    return matches
+  }, [processedHtml])
+
+  // Split HTML and insert graph components
+  const renderContent = () => {
+    const parts = processedHtml.split(/<div data-graph-id="([^"]+)"[^>]*><\/div>/)
+    const result: React.ReactNode[] = []
+    
+    for (let i = 0; i < parts.length; i++) {
+      if (i % 2 === 0) {
+        // Regular HTML content
+        if (parts[i]) {
+          result.push(
+            <div
+              key={`html-${i}`}
+              className="prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: parts[i] }}
+            />
+          )
+        }
+      } else {
+        // Graph component
+        const graphId = parts[i]
+        result.push(
+          <GraphRenderer key={`graph-${i}`} graphId={graphId} />
+        )
+      }
+    }
+    
+    return result
+  }
+
   return (
     <>
       <motion.div
@@ -40,10 +97,7 @@ export default function TopicContent({ topic, contentHtml }: TopicContentProps) 
           {topic.description}
         </p>
 
-        <div
-          className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />
+        {renderContent()}
       </motion.article>
     </>
   )

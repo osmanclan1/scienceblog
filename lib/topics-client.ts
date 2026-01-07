@@ -37,3 +37,6 @@ export function isTopicUnlocked(topicId: string): boolean {
   return getUnlockedTopics().includes(topicId)
 }
 
+
+
+

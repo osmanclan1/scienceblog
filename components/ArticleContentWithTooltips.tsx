@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import GraphRenderer from './graphs/GraphRenderer'
 
 interface ArticleContentWithTooltipsProps {
   html: string
@@ -8,10 +9,11 @@ interface ArticleContentWithTooltipsProps {
 
 export default function ArticleContentWithTooltips({ html }: ArticleContentWithTooltipsProps) {
   const processedHtml = useMemo(() => {
+    let processed = html
     const tooltipText = 'Voltage is analogous to potential gravitational energy. Applying a voltage allows electrons to flow just like placing a ball at the top of a hill allows it to move downhill.'
     
     // Replace voltage with tooltip spans
-    return html.replace(
+    processed = processed.replace(
       /voltage/gi,
       (match) => {
         return `<span class="underline decoration-dotted decoration-primary cursor-help relative group" title="${tooltipText.replace(/"/g, '&quot;')}">
@@ -27,13 +29,44 @@ export default function ArticleContentWithTooltips({ html }: ArticleContentWithT
         </span>`
       }
     )
+    
+    // Replace [[Graph:graphId]] with placeholders
+    processed = processed.replace(/\[\[Graph:([^\]]+)\]\]/g, (match, graphId) => {
+      return `<div data-graph-id="${graphId.trim()}" class="graph-placeholder"></div>`
+    })
+    
+    return processed
   }, [html])
 
-  return (
-    <div
-      className="prose prose-lg max-w-none"
-      dangerouslySetInnerHTML={{ __html: processedHtml }}
-    />
-  )
+  // Split HTML and insert graph components
+  const renderContent = () => {
+    const parts = processedHtml.split(/<div data-graph-id="([^"]+)"[^>]*><\/div>/)
+    const result: React.ReactNode[] = []
+    
+    for (let i = 0; i < parts.length; i++) {
+      if (i % 2 === 0) {
+        // Regular HTML content
+        if (parts[i]) {
+          result.push(
+            <div
+              key={`html-${i}`}
+              className="prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: parts[i] }}
+            />
+          )
+        }
+      } else {
+        // Graph component
+        const graphId = parts[i]
+        result.push(
+          <GraphRenderer key={`graph-${i}`} graphId={graphId} />
+        )
+      }
+    }
+    
+    return result
+  }
+
+  return <>{renderContent()}</>
 }
 

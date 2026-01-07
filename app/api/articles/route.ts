@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { slug, title, topic, content, excerpt, requiredTopics } = body
+    const { slug, title, topic, content, excerpt, requiredTopics, quiz } = body
 
     if (!slug || !title || !topic || !content) {
       return NextResponse.json(
@@ -36,12 +36,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    saveArticle(slug, title, topic, content, excerpt, undefined, requiredTopics)
+    saveArticle(slug, title, topic, content, excerpt, undefined, requiredTopics, quiz)
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Error creating article:', error)
     return NextResponse.json(
-      { error: 'Failed to create article' },
+      { error: error instanceof Error ? error.message : 'Failed to create article' },
       { status: 500 }
     )
   }

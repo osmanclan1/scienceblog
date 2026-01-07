@@ -97,24 +97,59 @@ export function saveArticle(
   content: string, 
   excerpt?: string,
   date?: string,
-  requiredTopics?: string[]
+  requiredTopics?: string[],
+  quiz?: any
 ): void {
   const dir = getArticlesDirectory()
   const articleDate = date || new Date().toISOString()
   
+  // Properly format YAML frontmatter with quotes for strings that might contain special characters
+  const frontMatterParts = [
+    `title: ${JSON.stringify(title)}`,
+    `date: ${articleDate}`,
+    `topic: ${JSON.stringify(topic)}`,
+  ]
+  
+  if (excerpt) {
+    frontMatterParts.push(`excerpt: ${JSON.stringify(excerpt)}`)
+  }
+  
+  if (requiredTopics && requiredTopics.length > 0) {
+    frontMatterParts.push(`requiredTopics: ${JSON.stringify(requiredTopics)}`)
+  }
+  
+  if (quiz) {
+    // Format quiz as YAML (properly indented, matching gray-matter format)
+    // Use JSON.stringify but format as YAML block
+    const quizJson = JSON.stringify(quiz, null, 2)
+    const quizLines = quizJson.split('\n')
+    const quizFormatted = quizLines.map((line, index) => {
+      if (index === 0) {
+        return `quiz: ${line}`
+      }
+      return '  ' + line
+    }).join('\n')
+    frontMatterParts.push(quizFormatted)
+  }
+  
   const frontMatter = `---
-title: ${title}
-date: ${articleDate}
-topic: ${topic}
-${excerpt ? `excerpt: ${excerpt}` : ''}
-${requiredTopics && requiredTopics.length > 0 ? `requiredTopics: ${JSON.stringify(requiredTopics)}` : ''}
+${frontMatterParts.join('\n')}
 ---
 
 ${content}
 `
 
   const fullPath = path.join(dir, `${slug}.md`)
-  fs.writeFileSync(fullPath, frontMatter, 'utf8')
+  
+  try {
+    fs.writeFileSync(fullPath, frontMatter, 'utf8')
+  } catch (error) {
+    // On Vercel/serverless, filesystem is read-only
+    if (error instanceof Error && (error.message.includes('EACCES') || error.message.includes('read-only'))) {
+      throw new Error('Filesystem is read-only. Article updates are not supported in serverless environments. Use a database or external storage instead.')
+    }
+    throw error
+  }
 }
 
 export function deleteArticle(slug: string): boolean {
