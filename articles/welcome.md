@@ -2,10 +2,10 @@
 title: Welcome to My Blog
 date: 2024-01-15T00:00:00.000Z
 topic: General
-excerpt: A brief introduction to this private blog about science and concepts.
+excerpt: A brief introduction to this science blog about science and concepts.
 ---
 
-Welcome to my private blog! This is a space where I explore and explain various topics in science and other fascinating concepts.
+Welcome to my science blog! This is a space where I explore and explain various topics in science and other fascinating concepts.
 
 ## What You'll Find Here
 

@@ -62,7 +62,8 @@
   }
   
   .prose img {
-    @apply rounded-lg my-6;
+    @apply rounded-lg my-6 max-w-full h-auto;
+    @apply w-full object-contain;
   }
   
   .prose strong {
